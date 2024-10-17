@@ -65,13 +65,13 @@
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
                                 data-bs-slide="prev">
-                                <span style="background-color: #3498db; border-radius: 100%;"
+                                <span style="background-color: #333; border-radius: 100%;"
                                     class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
                             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
                                 data-bs-slide="next">
-                                <span style="background-color: #3498db; border-radius: 100%;"
+                                <span style="background-color: #333; border-radius: 100%;"
                                     class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
@@ -136,10 +136,10 @@
                     @if (isset($contact) && $contact)
                         <div class="col-sm footer-contact">
                             <h4>Contato</h4>
-                            <p>{{ $contact->address }}</p>
-                            <p>{{ $contact->city }}/{{ $contact->state }}</p>
-                            <p>{{ $contact->zipcode }}</p>
-                            <p class="mt-4"><strong>Telefone:</strong> <span>{{ $contact->phone }}</span></p>
+                            <p><strong>Endereço:</strong>{{ $contact->address }}</p>
+                            <p><strong>Cidade/Estado:</strong>{{ $contact->city }}/{{ $contact->state }}</p>
+                            <p><strong>Cep:</strong>{{ $contact->zipcode }}</p>
+                            <p><strong>Telefone:</strong> <span>{{ $contact->phone }}</span></p>
                             <p><strong>Email:</strong> <span>{{ $contact->email }}</span></p>
                         </div>
                     @endif

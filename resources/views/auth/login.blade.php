@@ -4,7 +4,7 @@
 <div class="main-content container">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-4">
+            <div class="col-md-4 mt-3 mb-2">
                 <div class="card shadow-lg">
                     <div class="card-header text-center bg-primary text-white">
                         Login

@@ -1892,3 +1892,17 @@ section,
 }
 
 //FIM BLOG
+
+//INICIO DIV PAGINA CONTATO
+.div-contact-page {
+    border-radius: 10px;
+    background-color: --var(--accent-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    bdisplay: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 70px 0;
+}
+
+//FIM DIV PAGINA CONTATO

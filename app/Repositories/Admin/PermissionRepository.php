@@ -20,7 +20,7 @@ class PermissionRepository implements PermissionRepositoryInterface
             ->when($term, function ($query) use ($term) {
                 return $query->where('name', 'like', '%' . $term . '%');
             })
-            ->paginate(10);
+            ->paginate(8);
     }
 
     public function find($id)

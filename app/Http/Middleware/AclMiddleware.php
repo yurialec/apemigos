@@ -18,7 +18,7 @@ class AclMiddleware
     {
         $routeName = Route::currentRouteName();
 
-        if (in_array($routeName, $this->except) || str_contains($routeName, 'index') || str_contains($routeName, 'update') || str_contains($routeName, 'store')) {
+        if (in_array($routeName, $this->except) || str_contains($routeName, 'list') || str_contains($routeName, 'update') || str_contains($routeName, 'store')) {
             return $next($request);
         }
 

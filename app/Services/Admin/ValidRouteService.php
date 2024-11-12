@@ -21,8 +21,10 @@ class ValidRouteService
         foreach (Route::getRoutes()->getRoutes() as $route) {
             $action = $route->getAction();
             if (
-                array_key_exists('as', $action) &&
-                (!str_contains($action['as'], 'index') && !str_contains($action['as'], 'store') && !str_contains($action['as'], 'update'))
+                array_key_exists('as', $action)
+                && (!str_contains($action['as'], 'list')
+                    && !str_contains($action['as'], 'store')
+                    && !str_contains($action['as'], 'update'))
             ) {
 
                 $route_name[] = ['name' => $action['as']];
@@ -55,6 +57,8 @@ class ValidRouteService
             "about",
             "contact",
             "site.blog.post",
+            "index.site",
+            "site.blog.index",
         ];
 
         $route_name = array_filter($route_name, function ($route) use ($removeItems) {

@@ -1,104 +1,107 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <h4>Cadastrar Informações Contato</h4>
-        </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-center">
-                <form method="POST" @submit.prevent="save" class="col-lg-6" autocomplete="off">
-                    <div v-if="alertStatus === true" class="alert alert-success alert-dismissible fade show"
-                        role="alert">
-                        <i class="fa-regular fa-circle-check"></i> Registro cadastrado com sucesso
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+    <div class="container-fluid px-4 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Cadastrar Informações Contato</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <form method="POST" @submit.prevent="save" class="col-lg-6" autocomplete="off">
+                        <div v-if="alertStatus === true" class="alert alert-success alert-dismissible fade show"
+                            role="alert">
+                            <i class="fa-regular fa-circle-check"></i> Registro cadastrado com sucesso
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
 
-                    <div v-if="alertStatus === 'notAllowed'" class="alert alert-warning alert-dismissible fade show"
-                        role="alert">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        Você não tem permissão para acessar essa funcionalidade
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                        <div v-if="alertStatus === 'notAllowed'" class="alert alert-warning alert-dismissible fade show"
+                            role="alert">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            Você não tem permissão para acessar essa funcionalidade
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
 
-                    <div v-if="alertStatus === false" class="alert alert-danger alert-dismissible fade show"
-                        role="alert">
-                        <i class="fa-regular fa-circle-xmark"></i> Erro ao atualizar registro
-                        <hr>
-                        <ul v-for="messages in messages.data.errors" :key="messages[0]">
-                            <li>{{ messages[0] }}</li>
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+                        <div v-if="alertStatus === false" class="alert alert-danger alert-dismissible fade show"
+                            role="alert">
+                            <i class="fa-regular fa-circle-xmark"></i> Erro ao atualizar registro
+                            <hr>
+                            <ul v-for="messages in messages.data.errors" :key="messages[0]">
+                                <li>{{ messages[0] }}</li>
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
 
-                    <div v-if="loading === true" class="d-flex justify-content-center">
-                        <button class="btn btn-primary" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        </button>
-                    </div>
+                        <div v-if="loading === true" class="d-flex justify-content-center">
+                            <button class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
 
-                    <div v-else class="container">
-                        <div class="row">
-                            <div class="col-sm">
-                                <div class="form-group mb-3">
-                                    <label>CEP</label>
-                                    <input type="text" class="form-control" @keyup="searchCep()"
-                                        v-model="contact.zipcode" autocomplete="off" v-mask="'########'">
+                        <div v-else class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group mb-3">
+                                        <label>CEP</label>
+                                        <input type="text" class="form-control" @keyup="searchCep()"
+                                            v-model="contact.zipcode" autocomplete="off" v-mask="'########'">
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label>Estado</label>
+                                        <select class="form-control" v-model="contact.state">
+                                            <option v-for="(name, abbreviation) in states" :key="abbreviation"
+                                                :value="abbreviation">
+                                                {{ name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label>Endereço</label>
+                                        <input type="text" class="form-control" v-model="contact.address"
+                                            autocomplete="off">
+                                    </div>
                                 </div>
-                                <div class="form-group mb-3">
-                                    <label>Estado</label>
-                                    <select class="form-control" v-model="contact.state">
-                                        <option v-for="(name, abbreviation) in states" :key="abbreviation"
-                                            :value="abbreviation">
-                                            {{ name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label>Endereço</label>
-                                    <input type="text" class="form-control" v-model="contact.address"
-                                        autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <div class="form-group mb-3">
-                                    <label>Telefone</label>
-                                    <input type="text" class="form-control" v-model="contact.phone"
-                                        @input="validatePhone" maxlength="11" autocomplete="off">
+                                <div class="col-sm">
+                                    <div class="form-group mb-3">
+                                        <label>Telefone</label>
+                                        <input type="text" class="form-control" v-model="contact.phone"
+                                            @input="validatePhone" maxlength="11" autocomplete="off">
 
-                                    <small v-if="this.validPhone === false" class="text-danger">Telefone
-                                        inválido</small>
-                                </div>
+                                        <small v-if="this.validPhone === false" class="text-danger">Telefone
+                                            inválido</small>
+                                    </div>
 
-                                <div class="form-group mb-3">
-                                    <label>E-mail</label>
-                                    <input type="text" class="form-control" v-model="contact.email"
-                                        @input="validateEmail" autocomplete="off">
+                                    <div class="form-group mb-3">
+                                        <label>E-mail</label>
+                                        <input type="text" class="form-control" v-model="contact.email"
+                                            @input="validateEmail" autocomplete="off">
 
-                                    <small v-if="this.validEmail === false" class="text-danger">
-                                        E-mail inválido
-                                    </small>
-                                </div>
+                                        <small v-if="this.validEmail === false" class="text-danger">
+                                            E-mail inválido
+                                        </small>
+                                    </div>
 
-                                <div class="form-group mb-3">
-                                    <label>Cidade</label>
-                                    <input type="text" class="form-control" v-model="contact.city" autocomplete="off">
+                                    <div class="form-group mb-3">
+                                        <label>Cidade</label>
+                                        <input type="text" class="form-control" v-model="contact.city"
+                                            autocomplete="off">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row mt-5">
-                        <div class="col-sm-6">
-                            <div class="text-start">
-                                <a :href="urlIndexContact" class="btn btn-secondary btn-sm">Voltar</a>
+                        <div class="row mt-5">
+                            <div class="col-sm-6">
+                                <div class="text-start">
+                                    <a :href="urlIndexContact" class="btn btn-secondary btn-sm">Voltar</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="col text-end">
+                                    <button class="btn btn-primary btn-sm" type="submit">Cadastrar</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="col text-end">
-                                <button class="btn btn-primary btn-sm" type="submit">Cadastrar</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

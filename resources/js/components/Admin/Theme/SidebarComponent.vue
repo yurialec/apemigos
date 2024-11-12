@@ -1,37 +1,44 @@
 <template>
-    <div class="sidebar">
-        <div class="logo">
-            <a :href="urlHome" class="logo-link">
-                <img v-show="logo" :src="'/storage/' + logo" alt="Logo" class="logo-img">
-            </a>
-        </div>
-        <ul class="sidebar-list">
-            <li v-for="menu in menus" :key="menu.id">
-                <template v-if="menu.children && menu.children.length > 0">
-                    <div>
-                        <a href="#" class="sidebar-nav" @click.prevent="toggleSubmenu(menu)">
-                            <i id="icon" :class="menu.icon"></i>
-                            <span style="margin-left: 10px;">{{ menu.label }}</span>
-                            <i class="bi bi-caret-down" :class="{ 'open': menu.expanded }"></i>
-                        </a>
-                        <ul class="sidebar-submenu-list" v-show="menu.expanded">
-                            <li v-for="child in menu.children" :key="child.id">
-                                <a class="sidebar-nav" :href="child.url">
-                                    <i id="icon" :class="child.icon"></i>
-                                    <span style="margin-left: 10px;">{{ child.label }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </template>
-                <template v-else>
-                    <a class="sidebar-nav" :href="menu.url">
-                        <i id="icon" :class="menu.icon"></i>
-                        <span style="margin-left: 10px;">{{ menu.label }}</span>
-                    </a>
-                </template>
-            </li>
-        </ul>
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <template v-for="menu in menus" :key="menu.id">
+                        <template v-if="menu.children && menu.children.length > 0">
+                            <a class="nav-link collapsed" href="#" @click.prevent="toggleSubmenu(menu)"
+                                data-bs-toggle="collapse" :data-bs-target="'#collapse' + menu.id" aria-expanded="false"
+                                :aria-controls="'collapse' + menu.id">
+                                <div class="sb-nav-link-icon">
+                                    <i :class="menu.icon"></i>
+                                </div>
+                                {{ menu.label }}
+                                <div class="sb-sidenav-collapse-arrow">
+                                    <i class="bi bi-chevron-down"></i>
+                                </div>
+                            </a>
+                            <div class="collapse" :id="'collapse' + menu.id" :class="{ show: menu.expanded }"
+                                data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a v-for="child in menu.children" :key="child.id" class="nav-link"
+                                        :href="child.url">
+                                        <i :class="child.icon"></i>
+                                        {{ child.label }}
+                                    </a>
+                                </nav>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <a class="nav-link" :href="menu.url">
+                                <div class="sb-nav-link-icon">
+                                    <i :class="menu.icon"></i>
+                                </div>
+                                {{ menu.label }}
+                            </a>
+                        </template>
+                    </template>
+                </div>
+            </div>
+        </nav>
     </div>
 </template>
 
@@ -39,13 +46,11 @@
 export default {
     name: 'Sidebar',
     props: {
-        urlHome: String,
-        logo: String,
+        
     },
     data() {
         return {
             menus: [],
-            submenuState: {},
         };
     },
     created() {
@@ -65,6 +70,7 @@ export default {
         },
         toggleSubmenu(menu) {
             menu.expanded = !menu.expanded;
+            this.closeAllSubmenus(menu);
         },
         closeAllSubmenus(currentMenu) {
             this.menus.forEach(menu => {

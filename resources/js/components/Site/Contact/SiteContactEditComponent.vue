@@ -1,106 +1,108 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <h4>Editar Informações Contato</h4>
-        </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-center">
+    <div class="container-fluid px-4 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Editar Informações Contato</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
 
-                <div v-if="loading" class="d-flex justify-content-center">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
+                    <div v-if="loading" class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
+
+                    <form v-else method="POST" action="" @submit.prevent="save()" class="col-lg-8" autocomplete="off">
+                        <div v-if="alertStatus === true" class="alert alert-success alert-dismissible fade show"
+                            role="alert">
+                            <i class="fa-regular fa-circle-check"></i> Registro atualizado com sucesso
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <div v-if="alertStatus === false" class="alert alert-danger alert-dismissible fade show"
+                            role="alert">
+                            <i class="fa-regular fa-circle-xmark"></i> Erro ao atualizar registro
+                            <hr>
+                            <ul v-for="msg in messages.data.errors">
+                                <li>{{ msg[0] }}</li>
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <div v-if="loading === true" class="d-flex justify-content-center">
+                            <button class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            </button>
+                        </div>
+
+
+                        <div v-else class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group mb-3">
+                                        <label>CEP</label>
+                                        <input type="text" class="form-control" @keyup="searchCep()"
+                                            v-model="contact.contact.zipcode" autocomplete="off" v-mask="'########'">
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label>Estado</label>
+                                        <select class="form-control" v-model="contact.contact.state">
+                                            <option v-for="(name, abbreviation) in states" :key="abbreviation"
+                                                :value="abbreviation">
+                                                {{ name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label>Endereço</label>
+                                        <input type="text" class="form-control" v-model="contact.contact.address"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group mb-3">
+                                        <label>Telefone</label>
+                                        <input type="text" class="form-control" v-model="contact.contact.phone"
+                                            @input="validatePhone" maxlength="11" autocomplete="off">
+
+                                        <small v-if="this.validPhone === false" class="text-danger">Telefone
+                                            inválido</small>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label>E-mail</label>
+                                        <input type="text" class="form-control" v-model="contact.contact.email"
+                                            @input="validateEmail" autocomplete="off">
+
+                                        <small v-if="this.validEmail === false" class="text-danger">
+                                            E-mail inválido
+                                        </small>
+                                    </div>
+
+                                    <div class="form-group mb-3">
+                                        <label>Cidade</label>
+                                        <input type="text" class="form-control" v-model="contact.contact.city"
+                                            autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-sm-6">
+                                <div class="text-start">
+                                    <a :href="urlIndexContact" class="btn btn-secondary btn-sm">Voltar</a>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="col text-end">
+                                    <button class="btn btn-primary btn-sm" type="submit">Atualizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
-                <form v-else method="POST" action="" @submit.prevent="save()" class="col-lg-8" autocomplete="off">
-                    <div v-if="alertStatus === true" class="alert alert-success alert-dismissible fade show"
-                        role="alert">
-                        <i class="fa-regular fa-circle-check"></i> Registro atualizado com sucesso
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-
-                    <div v-if="alertStatus === false" class="alert alert-danger alert-dismissible fade show"
-                        role="alert">
-                        <i class="fa-regular fa-circle-xmark"></i> Erro ao atualizar registro
-                        <hr>
-                        <ul v-for="msg in messages.data.errors">
-                            <li>{{ msg[0] }}</li>
-                        </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-
-                    <div v-if="loading === true" class="d-flex justify-content-center">
-                        <button class="btn btn-primary" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        </button>
-                    </div>
-
-
-                    <div v-else class="container">
-                        <div class="row">
-                            <div class="col-sm">
-                                <div class="form-group mb-3">
-                                    <label>CEP</label>
-                                    <input type="text" class="form-control" @keyup="searchCep()"
-                                        v-model="contact.contact.zipcode" autocomplete="off" v-mask="'########'">
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label>Estado</label>
-                                    <select class="form-control" v-model="contact.contact.state">
-                                        <option v-for="(name, abbreviation) in states" :key="abbreviation"
-                                            :value="abbreviation">
-                                            {{ name }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label>Endereço</label>
-                                    <input type="text" class="form-control" v-model="contact.contact.address"
-                                        autocomplete="off">
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <div class="form-group mb-3">
-                                    <label>Telefone</label>
-                                    <input type="text" class="form-control" v-model="contact.contact.phone"
-                                        @input="validatePhone" maxlength="11" autocomplete="off">
-
-                                    <small v-if="this.validPhone === false" class="text-danger">Telefone
-                                        inválido</small>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label>E-mail</label>
-                                    <input type="text" class="form-control" v-model="contact.contact.email"
-                                        @input="validateEmail" autocomplete="off">
-
-                                    <small v-if="this.validEmail === false" class="text-danger">
-                                        E-mail inválido
-                                    </small>
-                                </div>
-
-                                <div class="form-group mb-3">
-                                    <label>Cidade</label>
-                                    <input type="text" class="form-control" v-model="contact.contact.city"
-                                        autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-5">
-                        <div class="col-sm-6">
-                            <div class="text-start">
-                                <a :href="urlIndexContact" class="btn btn-secondary btn-sm">Voltar</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="col text-end">
-                                <button class="btn btn-primary btn-sm" type="submit">Atualizar</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

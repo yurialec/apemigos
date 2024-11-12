@@ -1,10 +1,11 @@
 <template>
-    <div class="card">
-        <div class="card-header">
-            <h4>Cadastrar Conteúdo Principal</h4>
-        </div>
-        <div class="card-body">
-            <div class="d-flex justify-content-center">
+    <div class="container-fluid px-4 mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h4>Cadastrar Conteúdo Principal</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
                     <form method="POST" @submit.prevent="save" class="col-lg-6" autocomplete="off">
                         <div v-if="alertStatus === true" class="alert alert-success alert-dismissible fade show"
                             role="alert">
@@ -61,6 +62,7 @@
                             </div>
                         </div>
                     </form>
+                </div>
             </div>
         </div>
     </div>

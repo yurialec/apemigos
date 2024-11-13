@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @include('partials.navbar')
 
 <div class="main-content container">
@@ -22,4 +21,4 @@
     </div>
 </div>
 
-@include('partials.footer')
+@include('partials.footer.index')

@@ -1,4 +1,4 @@
-<header id="header" class="header d-flex align-items-center sticky-top">
+<header id="header" class="header d-flex align-items-center sticky-top" style="background-color: #f8f9fa; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
     <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
         <a class="navbar-brand" href="{{ url('/') }}">
             @if (isset(App\Models\Site\SiteLogo::first()->image))

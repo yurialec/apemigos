@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Traits\SiteTrait;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -20,7 +19,6 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-    use SiteTrait;
 
     /**
      * Where to redirect users after login.
@@ -38,18 +36,6 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
-    }
-
-    /**
-     * Show the application's login form.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showLoginForm()
-    {
-        $contact = $this->contactSite();
-        $socialmedias = $this->socialmedias();
-        return view('auth.login', compact('contact', 'socialmedias'));
     }
 
     public function logout()

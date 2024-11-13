@@ -2,9 +2,10 @@
 @include('partials.navbar')
 
 <div class="main-content container">
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6 mt-3 mb-2">
+            <div class="col-md-6">
                 <div class="card shadow-lg">
                     <div class="card-header text-center bg-primary text-white">
                         Login
@@ -64,5 +65,9 @@
             </div>
         </div>
     </div>
+
+
 </div>
+</div>
+
 @include('partials.footer')
